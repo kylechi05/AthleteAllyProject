@@ -114,37 +114,75 @@ function Linegraph() {
         }
     }
 
+    const nonDiscriminatoryPolicyScores = Object.values(archivedUniversityofIowa).map(item => item.nonDiscriminatoryPolicy)
+    const transInclusionPolicyScores = Object.values(archivedUniversityofIowa).map(item => item.transInclusionPolicy)
+    const sexualHarassmentPolicyScores = Object.values(archivedUniversityofIowa).map(item => item.sexualHarassmentPolicy)
+    const fanCodeOfConductScores = Object.values(archivedUniversityofIowa).map(item => item.fanCodeOfConduct)
+    const annualPartnershipCollaborationScores = Object.values(archivedUniversityofIowa).map(item => item.annualPartnershipCollaboration)
+    const lgbtqEducationalResourcesScores = Object.values(archivedUniversityofIowa).map(item => item.lgbtqEducationalResources)
+    const proLgbtqTrainingsForStaffScores = Object.values(archivedUniversityofIowa).map(item => item.proLgbtqTrainingsForStaff)
+    const proLgbtqTrainingsForAthletesScores = Object.values(archivedUniversityofIowa).map(item => item.proLgbtqTrainingsForAthletes)
+    const totalScoreScores = Object.values(archivedUniversityofIowa).map(item => item.totalScore)
+
+
     const labels = ['2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023']
 
     const options = {
-        responsive: true,
+        clip: false,
+        layout: {
+            padding: 15,
+        },
         scale: {
-            tick: {
-                bounds: 'data',
-            },
             y: {
                 min: 0,
                 max: 1,
             }
         },
-        layout: {
-            padding: 100,
-        },
         interaction: {
             intersect: false,
-            mode: 'index',
+            mode: 'x',
             position: 'nearest'
         },
+        animation: {
+            duration: 300,
+            easing: 'easeInOutCubic'
+        },
         plugins: {
-            legend: {
-                display: true,
-                position: 'top'
-            },
             title: {
                 display: true,
                 text: 'The University of Iowa'
             },
-           
+            legend: {
+                display: true,
+                position: 'bottom',
+                align: 'center',
+                labels: {
+                    boxWidth: 15,
+                    boxHeight: 15,
+                    generateLabels: (chart) => {
+                        return chart.data.datasets.map(
+                            (dataset, index) => ({
+                                text: dataset.label,
+                                fillStyle: dataset.backgroundColor,
+                                strokeStyle: dataset.borderColor,
+                                fontColor: chart.isDatasetVisible(index) ? '#666' : '#AAA',
+                                datasetIndex: index,
+                            })
+                        )
+                    }
+                },
+                onClick: (click, legendItem, legend) => handleLegendClick(click, legendItem, legend)
+            }
+        }
+    }
+
+    const handleLegendClick = (click, legendItem, legend) => {
+        const index = legendItem.datasetIndex
+        const lc = legend.chart
+        if (lc.isDatasetVisible(index)) {
+            lc.hide(index)
+        } else {
+            lc.show(index)
         }
     }
 
@@ -153,176 +191,73 @@ function Linegraph() {
         datasets: [
             {
                 label: 'Nondiscriminatory Policy',
-                data: [
-                    archivedUniversityofIowa['2016'].nonDiscriminatoryPolicy,
-                    archivedUniversityofIowa['2017'].nonDiscriminatoryPolicy,
-                    archivedUniversityofIowa['2018'].nonDiscriminatoryPolicy,
-                    archivedUniversityofIowa['2019'].nonDiscriminatoryPolicy,
-                    archivedUniversityofIowa['2020'].nonDiscriminatoryPolicy,
-                    archivedUniversityofIowa['2021'].nonDiscriminatoryPolicy,
-                    archivedUniversityofIowa['2022'].nonDiscriminatoryPolicy,
-                    archivedUniversityofIowa['2023'].nonDiscriminatoryPolicy,
-                ],
+                data: nonDiscriminatoryPolicyScores,
                 borderColor: 'rgb(245, 131, 122)',
                 backgroundColor: 'rgba(245, 131, 122, 0.5)',
-                tension: '',
                 hidden: true
             },
             {
                 label: 'Trans Inclusion Policy',
-                data: [
-                    archivedUniversityofIowa['2016'].transInclusionPolicy,
-                    archivedUniversityofIowa['2017'].transInclusionPolicy,
-                    archivedUniversityofIowa['2018'].transInclusionPolicy,
-                    archivedUniversityofIowa['2019'].transInclusionPolicy,
-                    archivedUniversityofIowa['2020'].transInclusionPolicy,
-                    archivedUniversityofIowa['2021'].transInclusionPolicy,
-                    archivedUniversityofIowa['2022'].transInclusionPolicy,
-                    archivedUniversityofIowa['2023'].transInclusionPolicy,
-                ],
+                data: transInclusionPolicyScores,
                 borderColor: 'rgb(245, 167, 122)',
                 backgroundColor: 'rgba(245, 167, 122, 0.5)',
-                tension: '',
                 hidden: true
             },
             {
                 label: 'Sexual Harassment Policy',
-                data: [
-                    archivedUniversityofIowa['2016'].sexualHarassmentPolicy,
-                    archivedUniversityofIowa['2017'].sexualHarassmentPolicy,
-                    archivedUniversityofIowa['2018'].sexualHarassmentPolicy,
-                    archivedUniversityofIowa['2019'].sexualHarassmentPolicy,
-                    archivedUniversityofIowa['2020'].sexualHarassmentPolicy,
-                    archivedUniversityofIowa['2021'].sexualHarassmentPolicy,
-                    archivedUniversityofIowa['2022'].sexualHarassmentPolicy,
-                    archivedUniversityofIowa['2023'].sexualHarassmentPolicy,
-                ],
+                data: sexualHarassmentPolicyScores,
                 borderColor: 'rgb(245, 231, 122)',
                 backgroundColor: 'rgba(245, 231, 122, 0.5)',
-                tension: '',
                 hidden: true
             },
             {
                 label: 'Fan Code of Conduct',
-                data: [
-                    archivedUniversityofIowa['2016'].fanCodeOfConduct,
-                    archivedUniversityofIowa['2017'].fanCodeOfConduct,
-                    archivedUniversityofIowa['2018'].fanCodeOfConduct,
-                    archivedUniversityofIowa['2019'].fanCodeOfConduct,
-                    archivedUniversityofIowa['2020'].fanCodeOfConduct,
-                    archivedUniversityofIowa['2021'].fanCodeOfConduct,
-                    archivedUniversityofIowa['2022'].fanCodeOfConduct,
-                    archivedUniversityofIowa['2023'].fanCodeOfConduct,
-                ],
+                data: fanCodeOfConductScores,
                 borderColor: 'rgb(200, 245, 122)',
                 backgroundColor: 'rgba(200, 245, 122, 0.5)',
-                tension: '',
                 hidden: true
             },
             {
                 label: 'Annual Partnership / Collaboration',
-                data: [
-                    archivedUniversityofIowa['2016'].annualPartnershipCollaboration,
-                    archivedUniversityofIowa['2017'].annualPartnershipCollaboration,
-                    archivedUniversityofIowa['2018'].annualPartnershipCollaboration,
-                    archivedUniversityofIowa['2019'].annualPartnershipCollaboration,
-                    archivedUniversityofIowa['2020'].annualPartnershipCollaboration,
-                    archivedUniversityofIowa['2021'].annualPartnershipCollaboration,
-                    archivedUniversityofIowa['2022'].annualPartnershipCollaboration,
-                    archivedUniversityofIowa['2023'].annualPartnershipCollaboration,
-                ],
+                data: annualPartnershipCollaborationScores,
                 borderColor: 'rgb(122, 245, 136)',
                 backgroundColor: 'rgba(122, 245, 136, 0.5)',
-                tension: '',
                 hidden: true
             },
             {
                 label: 'LGBTQ Educational Resources',
-                data: [
-                    archivedUniversityofIowa['2016'].lgbtqEducationalResources,
-                    archivedUniversityofIowa['2017'].lgbtqEducationalResources,
-                    archivedUniversityofIowa['2018'].lgbtqEducationalResources,
-                    archivedUniversityofIowa['2019'].lgbtqEducationalResources,
-                    archivedUniversityofIowa['2020'].lgbtqEducationalResources,
-                    archivedUniversityofIowa['2021'].lgbtqEducationalResources,
-                    archivedUniversityofIowa['2022'].lgbtqEducationalResources,
-                    archivedUniversityofIowa['2023'].lgbtqEducationalResources,
-                ],
+                data: lgbtqEducationalResourcesScores,
                 borderColor: 'rgb(122, 245, 233)',
                 backgroundColor: 'rgba(122, 245, 233, 0.5)',
-                tension: '',
                 hidden: true
             },
             {
                 label: 'Pro-LGBTQ Trainings for Staff',
-                data: [
-                    archivedUniversityofIowa['2016'].proLgbtqTrainingsForStaff,
-                    archivedUniversityofIowa['2017'].proLgbtqTrainingsForStaff,
-                    archivedUniversityofIowa['2018'].proLgbtqTrainingsForStaff,
-                    archivedUniversityofIowa['2019'].proLgbtqTrainingsForStaff,
-                    archivedUniversityofIowa['2020'].proLgbtqTrainingsForStaff,
-                    archivedUniversityofIowa['2021'].proLgbtqTrainingsForStaff,
-                    archivedUniversityofIowa['2022'].proLgbtqTrainingsForStaff,
-                    archivedUniversityofIowa['2023'].proLgbtqTrainingsForStaff,
-                ],
-                borderColor: 'rgb(122, 138, 245',
+                data: proLgbtqTrainingsForStaffScores,
+                borderColor: 'rgb(122, 138, 245)',
                 backgroundColor: 'rgba(122, 138, 245, 0.5)',
-                tension: '',
                 hidden: true
             },
             {
                 label: 'Pro-LGBTQ Trainings for Athletes',
-                data: [
-                    archivedUniversityofIowa['2016'].proLgbtqTrainingsForAthletes,
-                    archivedUniversityofIowa['2017'].proLgbtqTrainingsForAthletes,
-                    archivedUniversityofIowa['2018'].proLgbtqTrainingsForAthletes,
-                    archivedUniversityofIowa['2019'].proLgbtqTrainingsForAthletes,
-                    archivedUniversityofIowa['2020'].proLgbtqTrainingsForAthletes,
-                    archivedUniversityofIowa['2021'].proLgbtqTrainingsForAthletes,
-                    archivedUniversityofIowa['2022'].proLgbtqTrainingsForAthletes,
-                    archivedUniversityofIowa['2023'].proLgbtqTrainingsForAthletes,
-                ],
+                data: proLgbtqTrainingsForAthletesScores,
                 borderColor: 'rgb(194, 122, 245)',
                 backgroundColor: 'rgba(194, 122, 245, 0.5)',
-                tension: '',
                 hidden: true
             },
             {
                 label: 'Total Score',
-                data: [
-                    archivedUniversityofIowa['2016'].totalScore,
-                    archivedUniversityofIowa['2017'].totalScore,
-                    archivedUniversityofIowa['2018'].totalScore,
-                    archivedUniversityofIowa['2019'].totalScore,
-                    archivedUniversityofIowa['2020'].totalScore,
-                    archivedUniversityofIowa['2021'].totalScore,
-                    archivedUniversityofIowa['2022'].totalScore,
-                    archivedUniversityofIowa['2023'].totalScore,
-                ],
+                data: totalScoreScores,
                 borderColor: 'rgb(245, 122, 214)',
                 backgroundColor: 'rgba(245, 122, 214, 0.5)',
-                tension: '',
+                hidden: false
             }
         ]
     }
 
-    const graphToggleOptions = (data.datasets).map(metric => 
-        <li key={metric.label}>
-            <label onClick={() => {
-                metric.hidden = !metric.hidden
-            }}>
-                <input type='checkbox' />
-                {metric.label}
-            </label>
-        </li>
-    )
-
     return (
         <div>
             <Line data={data} options={options} />
-            <ul className='graph-options'>
-                {graphToggleOptions}
-            </ul>
         </div>
     )
 }
