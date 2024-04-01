@@ -21,6 +21,8 @@ ChartJS.register(
     Legend
 )
 
+ChartJS.defaults.font.family = "'Montserrat', 'sans-serif'"
+
 function Linegraph() {
 
     const archivedUniversityofIowa = {
@@ -128,9 +130,11 @@ function Linegraph() {
     const labels = ['2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023']
 
     const options = {
+        responsive: true,
+        maintainAspectRatio: false,
         clip: false,
         layout: {
-            padding: 15,
+            padding: 0,
         },
         scale: {
             y: {
@@ -138,19 +142,49 @@ function Linegraph() {
                 max: 1,
             }
         },
-        interaction: {
-            intersect: false,
-            mode: 'x',
-            position: 'nearest'
+        scales: {
+            y: {
+                ticks: {
+                    callback: function(val) {
+                        return (val * 100) + "%"
+                    }
+                },
+                title: {
+                    display: true,
+                    text: 'Score Percentage',         
+                }
+            },
+            x : {
+                title: {
+                    display: true,
+                    text: 'Years'
+                }
+            }
         },
         animation: {
             duration: 300,
             easing: 'easeInOutCubic'
         },
+        interaction: {
+            intersect: false,
+            mode: 'x',
+            position: 'nearest'
+        },
         plugins: {
             title: {
                 display: true,
-                text: 'The University of Iowa'
+                text: 'Trends and Changes',
+                font: {
+                    size: 30,
+                    weight: 600
+                }
+            },
+            tooltip: {
+                callbacks: {
+                    label: function(context) {
+                        return context.dataset.label + ": " + Math.round(context.raw * 100) + "%"
+                    }
+                }
             },
             legend: {
                 display: true,
@@ -171,18 +205,22 @@ function Linegraph() {
                         )
                     }
                 },
-                onClick: (click, legendItem, legend) => handleLegendClick(click, legendItem, legend)
+                onClick: (click, legendItem, legend) => {
+                    const index = legendItem.datasetIndex
+                    const lc = legend.chart
+                    if (lc.isDatasetVisible(index)) {
+                        lc.hide(index)
+                    } else {
+                        lc.show(index)
+                    }
+                },
+                onHover: (event, chartElement) => {
+                    event.native.target.style.cursor = 'pointer'
+                },
+                onLeave: (event, chartElement) => {
+                    event.native.target.style.cursor = 'default'
+                }
             }
-        }
-    }
-
-    const handleLegendClick = (click, legendItem, legend) => {
-        const index = legendItem.datasetIndex
-        const lc = legend.chart
-        if (lc.isDatasetVisible(index)) {
-            lc.hide(index)
-        } else {
-            lc.show(index)
         }
     }
 
@@ -256,8 +294,10 @@ function Linegraph() {
     }
 
     return (
-        <div>
-            <Line data={data} options={options} />
+        <div className='graph-container'>
+            <div className='graph'>
+                <Line data={data} options={options} />
+            </div>
         </div>
     )
 }
