@@ -22,6 +22,7 @@ ChartJS.register(
 )
 
 ChartJS.defaults.font.family = "'Montserrat', 'sans-serif'"
+ChartJS.defaults.font.size = 16
 
 function Linegraph() {
 
@@ -151,13 +152,13 @@ function Linegraph() {
                 },
                 title: {
                     display: true,
-                    text: 'Score Percentage',         
+                    text: 'Score Percentage',  
                 }
             },
             x : {
                 title: {
                     display: true,
-                    text: 'Years'
+                    text: 'Years',
                 }
             }
         },
